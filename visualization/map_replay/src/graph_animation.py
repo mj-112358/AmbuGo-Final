@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
-"""Render the final 20-second animated graph from included recorded data.
+"""Render the final 20-second animated graph from recorded replay data.
 
-This is a portable adaptation of the approved polished graph. It does not rerun
-SUMO or alter recorded trajectories. B1000/a002 supplies the speed curve; the
-ordinary stopped-vehicle comparison includes all three ambulance missions.
-The horizontal axis is video time, with the same piecewise clock as the map.
+The renderer uses the supplied trajectories. B1000/a002 supplies the speed
+curve; ordinary stopped-vehicle counts include all three ambulance missions.
+The horizontal axis uses the map replay's piecewise video clock.
 
-Runtime: Python 3.12, NumPy, Matplotlib, Pillow and imageio-ffmpeg. No local vendor
-folders, network requests, machine-specific paths or display server are needed.
-"""
+Runtime: Python 3.12, NumPy, Matplotlib, Pillow and imageio-ffmpeg. Rendering
+reads local inputs and uses a headless plotting backend."""
 from pathlib import Path
 import argparse
 import hashlib
@@ -166,12 +164,10 @@ class Graph:
         return Image.fromarray(np.asarray(self.fig.canvas.buffer_rgba())[:, :, :3].copy())
 
 def render(output_dir=ROOT / "generated", preview=False, data_path=None):
-    """Render the MP4, or only a few still previews for a fast setup check.
-
-    Returns a dictionary describing the generated files. Preview images are
-    diagnostics, not replacements for the animated graph. The primary filename
-    is always 02_Progression.mp4.
-    """
+    """Render the MP4 or diagnostic still previews for a setup check.
+    
+    Return a dictionary describing the generated files. Preview images support
+    visual inspection; the primary animated output is 02_Progression.mp4."""
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     graph = Graph(data_path=data_path)

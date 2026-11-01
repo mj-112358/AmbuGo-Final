@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Plot the paper's condition-specific JSEL-minus-JFAST effects.
 
-The input contains paired means and marginal 95% seed-bootstrap intervals.
-This script plots those stored estimates; it does not rerun the inference.
-"""
+Read paired means and marginal 95% seed-bootstrap intervals from the stored
+analysis and render the nine condition-specific contrasts."""
 
 from __future__ import annotations
 

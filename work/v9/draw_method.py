@@ -1,4 +1,4 @@
-"""Publication algorithm flowchart. Does not import or alter simulation code."""
+"""Render the publication algorithm flowchart from its diagram specification."""
 from pathlib import Path
 import sys
 HERE=Path(__file__).resolve().parent
@@ -65,6 +65,6 @@ ax.text(4.72,1.04,'logged states only',ha='center',va='center',fontsize=9,color=
 fig.savefig(OUT/'method.png',dpi=300)
 fig.savefig(OUT/'method.svg')
 plt.close(fig)
-caption='''Figure. Joint ambulance routing and selective signal priority with a causal progress guard. Received counts and observed executed progress on regular road links determine each ambulance's mode. Selective mode evaluates a finite route–action library using a predicted time band and an approximate ordinary-traffic burden; an irreversible progress-triggered switch invokes aggressive joint routing and preemption. Both modes share request arbitration, service-age protection and legal signal clearances. The 8 s green label denotes a minimum, while amber, all-red and the reserved pedestrian opportunity last 3, 2 and 25 s. The separate paired-S0 ledger (executable policy P0) evaluates signed restricted residence change ΔJ, positive spatial exposure A and positive individual residence burden D⁺ from logged trajectories; those realized evaluation quantities are never controller inputs. No physical pedestrians or field calibration are implied.'''
+caption='''Figure. Joint ambulance routing and selective signal priority with a causal progress guard. Received counts and observed executed progress on regular road links determine each ambulance's mode. Selective mode evaluates a finite route–action library using a predicted time band and an approximate ordinary-traffic burden; an irreversible progress-triggered switch invokes aggressive joint routing and preemption. Both modes share request arbitration, service-age protection and legal signal clearances. The 8 s green label denotes a minimum, while amber, all-red and the reserved pedestrian opportunity last 3, 2 and 25 s. The separate paired-S0 ledger (executable policy P0) evaluates signed restricted residence change ΔJ, positive spatial exposure A and positive individual residence burden D⁺ from logged trajectories; those evaluation quantities are computed from the paired records. The pedestrian opportunity is a fixed signal reservation, and the traffic parameters specify the synthetic scenario.'''
 (OUT/'method_caption.txt').write_text(caption+'\n')
 print(OUT/'method.png')

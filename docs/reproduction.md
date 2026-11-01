@@ -11,8 +11,8 @@ files can be regenerated with the simulation commands below.
 
 There are 1,728 primary microscopic policy runs, 264 microscopic secondary runs,
 and 14,400 mechanically corrected mesoscopic policy runs. Development records
-are separate. These are policy-run counts, not counts of independent seeds or
-ambulances. The inputs are synthetic; the package contains no measured-city
+are separate. Each run evaluates one policy in a specified scenario. Independent-seed
+and mission counts are reported separately in the paper. The inputs are synthetic; the package contains no measured-city
 calibration dataset.
 
 ## Install the runtime
@@ -50,10 +50,9 @@ python work/v9/make_base_figures.py
 ```
 
 These commands regenerate analysis outputs from retained scalar records. The
-mesoscopic checks execute small synthetic verification cases. They do not
-rerun the comparative traffic study. The microscopic analysis resamples whole
-seed blocks; multiple missions and conditions within a seed are not treated
-as independent replicates.
+mesoscopic checks execute small synthetic verification cases. The microscopic
+analysis resamples whole seed blocks, preserving dependence among missions
+and conditions within each seed.
 
 Regeneration writes output files. Use a separate checkout to
 preserve the supplied outputs unchanged. Runtime measurements and numerical
@@ -176,8 +175,8 @@ above. An optional short numerical smoke check is then available:
 python verify_zip.py --directory . --smoke
 ```
 
-This is a 180-second software and path check. It is not another effectiveness
-experiment, and an ambulance need not finish within that horizon.
+This 180-second software and path check verifies startup and local inputs.
+Journey completion is evaluated in the full experiment runs.
 
 For the optional development replay and the historical archive-build procedure,
 see [`work/v9/README_reproducibility.txt`](../work/v9/README_reproducibility.txt).

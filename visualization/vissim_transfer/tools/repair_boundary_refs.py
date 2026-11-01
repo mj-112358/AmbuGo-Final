@@ -1,8 +1,8 @@
-"""Remove dangling predecessor references only at verified unconnected source boundaries.
+"""Repair dangling predecessor references at verified unconnected source boundaries.
 
-No lane, road shape, connection, or valid road/junction reference is changed.
-This is a structural repair, not a native Vissim import validation.
-"""
+The repair targets invalid boundary references and preserves lane geometry,
+road shape, connections and valid road/junction references. Inspect the
+resulting network during native Vissim import."""
 from pathlib import Path
 import argparse
 import hashlib

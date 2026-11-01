@@ -1,3 +1,3 @@
-# Dependencies for bounded numerical and retained-data checks; SUMO is not needed.
+# Dependencies for bounded numerical and retained-data checks.
 numpy==2.5.4
 scipy==1.18.1

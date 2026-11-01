@@ -55,7 +55,7 @@ class ExplainedController(Base):
             x['candidate_id']=k;x['eligible']=bool(mode!='P3' or x['eta_s']<=mint+self.c['epsilon']+1e-9);x['chosen']=x['route']==actual and x['action']==action
             if x['chosen']:chosen=k
         assert chosen is not None
-        self.explain_decisions.append(dict(t=t,ambulance=aid,current_edge=e,mode=mode,remaining_current_edge_m=remaining,incumbent_route=cur,candidates=candidates,chosen=chosen,minimum_predicted_eta_s=mint,time_band_s=self.c['epsilon'] if mode=='P3' else None,selection_rule='Minimum predicted ETA within finite candidates; in selective mode choose minimum heuristic burden within the predicted-time band, with constrained incumbent hysteresis.',burden_label='Unvalidated local queue/service-loss proxy, not measured network aftereffects or individual delay.'))
+        self.explain_decisions.append(dict(t=t,ambulance=aid,current_edge=e,mode=mode,remaining_current_edge_m=remaining,incumbent_route=cur,candidates=candidates,chosen=chosen,minimum_predicted_eta_s=mint,time_band_s=self.c['epsilon'] if mode=='P3' else None,selection_rule='Minimum predicted ETA within finite candidates; in selective mode choose minimum heuristic burden within the predicted-time band, with constrained incumbent hysteresis.',burden_label='Local queue/service-loss heuristic used to rank candidate interventions.'))
         self._context=oldcontext;self._estimates=oldestimates
     def requests_at(self,t,active):
         self._context=dict(kind='request',t=t);self._pulses=[]

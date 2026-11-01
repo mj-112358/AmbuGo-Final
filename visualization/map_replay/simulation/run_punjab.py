@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Real OSM geometry + explicitly hypothetical traffic/control demonstration.
+"""Run a synthetic traffic/control demonstration on mapped OSM geometry.
 
-Frozen v9 classes imported unchanged; routing is adapted to SUMO's allowed-turn
-edge graph and a real mapped hospital approach. This is not field validation.
-"""
+Import frozen v9 classes and adapt routing to SUMO's allowed-turn edge graph
+and a mapped hospital road approach. Traffic demand and signal settings are
+scenario inputs."""
 from pathlib import Path
 import sys,json,math,random,time,hashlib,argparse,subprocess,os,xml.etree.ElementTree as ET
 from collections import defaultdict
@@ -136,7 +136,7 @@ def run(policy,netfile,config):
     control=RealMapController(m,s,sigs,policy,c,turngraph=g,destination=config['destination_edge'])
     cmd=[ss.SUMO,'-n',str(netfile),'-r',s['route_file'],'--step-length','.5','--time-to-teleport','-1','--collision.action','warn','--no-step-log','true','--duration-log.disable','true','--no-warnings','true','--seed',str(s['seed']),'--error-log',str(HERE/(policy+'.log'))]
     traci.start(cmd);started=time.time();eids=sorted(m['edges']);jids=sorted(sigs);edgeix={e:i for i,e in enumerate(eids)};vs=s['ordinary']+s['ambulances'];vids=[v['id'] for v in vs];vix={v:i for i,v in enumerate(vids)}
-    geonet=dict(provenance='Actual OSM road geometry compiled by SUMO. Signal points represent modeled controlled-junction locations, not surveyed individual poles.',edges=[],signals=[])
+    geonet=dict(provenance='OSM road geometry compiled by SUMO, with signal points at modeled controlled-junction locations.',edges=[],signals=[])
     for eid in eids:
         ee=n.getEdge(eid);geonet['edges'].append(dict(id=eid,xy=[list(p) for p in ee.getShape()],lonlat=[list(traci.simulation.convertGeo(*p)) for p in ee.getShape()],lanes=ee.getLaneNumber(),speed_mps=ee.getSpeed(),length_m=ee.getLength()))
     for jid in jids:

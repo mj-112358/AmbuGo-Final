@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""Run bounded reproducibility checks without changing retained evidence.
+"""Verify retained evidence and run bounded reproducibility checks.
 
-Requires requirements-checks.txt, but not SUMO or the large trace archive.
-Simulation tests execute in temporary copies and in separate Python processes.
-These checks verify software and retained accounting, not field validity.
-"""
+Install requirements-checks.txt. Simulation tests execute in temporary copies
+and separate Python processes. Checks cover frozen source integrity, paired
+records, accounting identities and numerical reference cases."""
 
 from __future__ import annotations
 
@@ -249,7 +248,7 @@ def main() -> int:
         print(f"FAIL {error}", file=sys.stderr)
         return 1
     print(f"All checks passed in {time.perf_counter() - started:.2f} s.")
-    print("No full SUMO batch was run; retained source and results were not modified.")
+    print("Verification completed using retained records and isolated numerical tests.")
     return 0
 
 

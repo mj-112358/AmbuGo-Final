@@ -1,9 +1,8 @@
 """Seed-level paired inference for the synthetic AmbuGo study.
 
-All functions accept one value per independent scenario/seed, not one per vehicle
-or mission. Multiple missions within a seed must first be aggregated. No claim of
-field calibration or exact small-sample bootstrap coverage is made.
-"""
+Each input contains one value per independent scenario or seed. Aggregate
+multiple missions within a seed before inference. Functions report sample
+sizes, uncertainty estimates and the assumptions of each method."""
 from __future__ import annotations
 import argparse
 import csv
@@ -55,11 +54,10 @@ def paired_summary(treated, comparator, **kwargs):
 
 
 def paired_t_summary(values, confidence=.95):
-    """Student-t interval/test for independent episode differences.
-
-    Exact under normal differences; asymptotic robustness is not a finite-sample
-    guarantee. The paper should report bootstrap sensitivity as well.
-    """
+    """Student-t interval and test for independent episode differences.
+    
+    The finite-sample calculation assumes normally distributed differences.
+    Report a bootstrap sensitivity analysis alongside this parametric summary."""
     from scipy.stats import t
     x=_vector(values);n=len(x);mean=float(x.mean());sd=float(x.std(ddof=1));se=sd/math.sqrt(n)
     if se==0:
@@ -71,12 +69,11 @@ def paired_t_summary(values, confidence=.95):
 
 
 def sign_flip_test(values, *, permutations=20000, seed=20261025):
-    """Two-sided sign-flip diagnostic, valid with sign-exchangeable differences.
-
-    This is NOT an exact test of E[D]=0 without symmetry or a randomized design
-    justifying label exchangeability. Common random seeds alone do not establish
-    that assumption. It is deliberately labeled a sensitivity diagnostic.
-    """
+    """Two-sided sensitivity diagnostic for sign-exchangeable differences.
+    
+    Valid inference requires symmetry under the null or a randomized design
+    that justifies label exchangeability. Establish this assumption from the
+    experimental design in addition to using common random seeds."""
     x=_vector(values);obs=abs(float(x.mean()));n=len(x);extreme=0
     if n <= 18:
         total=2**n
@@ -93,7 +90,7 @@ def sign_flip_test(values, *, permutations=20000, seed=20261025):
         p=(extreme+1)/(total+1);mode='Monte Carlo plus-one correction'
     return {'p_value':float(p),'mode':mode,'draws':total,
             'assumption':'independent scenario differences invariant under independent sign reversal under the null',
-            'role':'sensitivity diagnostic; common random numbers alone do not justify exchangeability'}
+            'role':'sensitivity diagnostic requiring sign-exchangeable scenario differences'}
 
 
 def holm_adjust(p_values):
@@ -107,11 +104,11 @@ def holm_adjust(p_values):
 
 
 def clopper_pearson(successes, trials, confidence=.95):
-    """Two-sided exact binomial interval for INDEPENDENT Bernoulli trials.
-
-    For multiple ambulances per seed, apply only to an episode-level indicator
-    (for example any missed mission), not to pooled correlated missions.
-    """
+    """Two-sided exact binomial interval for independent Bernoulli trials.
+    
+    For multiple ambulances per seed, use an episode-level indicator such as
+    whether any mission missed its threshold. This retains the independent
+    episode as the unit of inference."""
     from scipy.stats import beta
     k,n=int(successes),int(trials)
     if n<=0 or not 0<=k<=n:raise ValueError('Invalid binomial count')
@@ -127,12 +124,11 @@ def zero_event_one_sided_upper(n,confidence=.95):
 
 
 def cumulative_metrics(treated,baseline,dt=1.):
-    """Compute exact discrete paired occupancy accounting on an exhaustive partition.
-
-    Arrays shape [time, fixed spatial groups]. Include external source queues,
-    internal junction space and all ordinary live vehicles exactly once.
-    These are grid-rectangle quadrature results, not continuous-time truth.
-    """
+    """Compute discrete paired occupancy accounting on an exhaustive partition.
+    
+    Arrays have shape [time, fixed spatial groups]. Include external source
+    queues, internal junction space and each ordinary live vehicle exactly once.
+    Integration uses grid-rectangle quadrature on the recorded time grid."""
     a=np.asarray(treated,dtype=float);b=np.asarray(baseline,dtype=float)
     if a.shape!=b.shape or a.ndim!=2 or not np.isfinite(a).all() or not np.isfinite(b).all():
         raise ValueError('Both arrays must have identical finite [time,group] shape')
@@ -172,7 +168,7 @@ def self_check():
     assert z['delta_residence_s']==0 and z['positive_spatial_burden_vehicle_s']==2
     z=sign_flip_test([1,1],permutations=100);assert z['p_value']==.5
     assert .01<zero_event_one_sided_upper(200)<.02
-    return {'checks_passed':5,'scope':'statistical utility identities, not traffic or field validation'}
+    return {'checks_passed':5,'scope':'statistical utility identities and interval calculations'}
 
 
 if __name__=='__main__':

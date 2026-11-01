@@ -1,4 +1,4 @@
-"""Read-only independent audit of supplied v8 CSVs; does not rerun traffic."""
+"""Audit the supplied v8 CSV records and compute independent statistical summaries."""
 import csv,json,collections,math,hashlib
 from pathlib import Path
 import numpy as np
@@ -62,7 +62,7 @@ for t in TAIL:
   lo=0 if k==0 else beta.ppf(.025,k,n-k+1);hi=1 if k==n else beta.ppf(.975,k+1,n-k)
   tail_max_ci_error=max(tail_max_ci_error,abs(float(t['cp_lo'])-lo),abs(float(t['cp_hi'])-hi))
 assert tail_counts
-# Fit alternatives are descriptive, not a new outcome-confirming model search.
+# Fit alternatives summarize the shape of the retained observations descriptively.
 xs=np.array([.6,.7,.8,.85,.9,.95]);ys=np.array([arr(G[(x,0.,'P2')],'d_delay_vh').mean() for x in xs]);fits={}
 for name,M in [('inverse_zero_intercept',(1/(1-xs))[:,None]),('linear',np.array([np.ones(6),xs]).T),('quadratic',np.array([np.ones(6),xs,xs*xs]).T),('inverse_with_intercept',np.array([np.ones(6),1/(1-xs)]).T)]:
  b=np.linalg.lstsq(M,ys,rcond=None)[0];sse=float(sum((ys-M@b)**2));fits[name]={'parameters':b.tolist(),'sse':sse,'r2':1-sse/sum((ys-ys.mean())**2)}

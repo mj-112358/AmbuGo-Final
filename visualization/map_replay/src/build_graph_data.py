@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
-"""Rebuild the two graph curves from the included raw SUMO replay arrays.
+"""Rebuild the two graph curves from raw SUMO replay arrays.
 
-No simulation, downloads or fitting are performed. This reproduces the data
-selection in the original build_story.py, retaining only the fields used by the
-final 20-second graph. Optional story/controller files explain event annotations;
-those annotations are not inferred from vehicle speed or stopped-vehicle counts.
-"""
+Apply the original build_story.py data selection to the fields used by the
+final 20-second graph. Event annotations use the optional story and
+controller files as their source."""
 from pathlib import Path
 import argparse
 import hashlib
@@ -25,8 +23,8 @@ DEFINITIONS = {
         "The same stopped-vehicle definition in the matched routing-only control "
         "run. Same synthetic demand and all three missions."),
     "comparison_scope": (
-        "Matched routing-only run, including all three ambulances. These "
-        "differences cannot be attributed to ambulance3 alone."),
+        "Matched routing-only comparison across the shared network, including "
+        "the combined traffic effects of all three ambulance missions."),
 }
 
 
@@ -61,11 +59,11 @@ def sample_frames(replay):
 
 
 def ordinary_stopped_counts(replay, metadata, frame_indices):
-    """Use each run's own metadata to exclude every ambulance, not only a002."""
+    """Count ordinary stopped vehicles using each run's ambulance metadata."""
     ambulance_indices = [i for i, item in enumerate(metadata["vehicles"])
                          if item["type"] == "ambulance"]
     ordinary = ~np.isin(replay["vehicle"], ambulance_indices)
-    # This is the recorded SUMO halting threshold, not a queue forecast.
+    # Classify recorded speeds using SUMO's 0.1 m/s halting threshold.
     stopped = ordinary & (replay["speed"] < 0.1)
     return np.bincount(frame_indices[stopped], minlength=len(replay["t"]))
 
@@ -134,12 +132,12 @@ def build(replay_dir=None, output_path=None, focus_ambulance="a002"):
             "focus_mission": mission,
             "derivation": (
                 "Read-only speed extraction and exact all-network stopped-vehicle "
-                "counting from recorded arrays. No rerun or trajectory modification."),
+                "counting from the supplied recorded arrays."),
             "selection_start_s": float(mission["depart"]),
             "selection_end_s": float(replay["t"][-1]),
             "annotation_lineage": (
                 "Graph event labels are from the separately included audited story "
-                "and controller log; they are not inferred from these two curves."),
+                "and controller log as their evidence source."),
         },
     }
     output_path.parent.mkdir(parents=True, exist_ok=True)

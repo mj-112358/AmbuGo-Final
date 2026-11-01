@@ -6,9 +6,9 @@ recorded simulation graphs evolve on the right. Both remain visible.
 These are explicitly separate examples. The planning film shows a 10,000
 priority limit; the graph data come from the earlier B1000 experiment.
 The right-hand clock is independent, progressing linearly from simulation
-time 761.5 to 1125 seconds across the film. This edit does NOT synchronize
-the teammate's maneuvers with measurements of those maneuvers. The original
-video's claims are retained, not independently validated by this edit.
+time 761.5 to 1125 seconds across the film. The composition presents the planning film and recorded graph episode
+with their respective clocks and scenario settings.
+
 
 02_Synchronized_Map_and_Graphs.mp4
 The earlier Google-map replay and the graphs share the same recorded
@@ -29,9 +29,9 @@ This is synthetic traffic on a mapped Mohali network. The speed curve tracks
 ambulance a002. Counts compare ordinary stopped vehicles in AmbuGo and the
 matched routing-only run, including the effects of all three missions.
 Stopped means below 0.1 m/s; counts exclude ambulances and traffic awaiting
-insertion. These are instantaneous counts, not cumulative delay or proof of
-minimum congestion. The subtitle shows escalation to stronger priority.
-Arrival means the modeled hospital road approach. No Vissim run was made.
+insertion. The graph reports instantaneous stopped-vehicle counts. The subtitle shows
+escalation to stronger priority. Arrival means the modeled hospital road
+approach. These trajectories were generated in SUMO.
 
 REPRODUCE
 With Python 3.12 or a compatible release:

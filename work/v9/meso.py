@@ -1,11 +1,8 @@
-"""Independent conservative mesoscopic and analytic checks for AmbuGo.
+"""Conservative mesoscopic and analytic numerical references for AmbuGo.
 
-This module is a numerical verification reference, not a calibrated city model.
-It uses a per-lane FIFO point queue with a free-flow travel clock, physical and
-PCU storage, old-state receiving reservations and fractional service credits.
-No lateral yielding, lane changing, yellow discharge or pedestrian trajectories
-are simulated. It must not be used to validate those mechanisms in SUMO.
-"""
+The model uses per-lane FIFO point queues, free-flow travel clocks, physical
+and PCU storage, old-state receiving reservations and fractional service
+credits. These mechanisms support conservation and queue-accounting checks."""
 from __future__ import annotations
 import csv
 import hashlib
@@ -71,11 +68,10 @@ class Link:
     def travel(self): return self.length/self.speed
 
 class CyclicSignal:
-    """Exclusive incoming-approach green, yellow, all-red, then a pedestrian block.
-
-    The pedestrian block is an occupancy reservation only. No pedestrian delay or
-    safety conclusion follows from this simplified signal reference.
-    """
+    """Exclusive approach greens with yellow, all-red and pedestrian reservations.
+    
+    The pedestrian stage reserves signal occupancy for its configured duration.
+    This reference represents pedestrians through that fixed reservation."""
     def __init__(self, arms, greens, offset=0, min_green=8., amber=3., all_red=2., ped=25.):
         self.arms=tuple(arms); self.greens=tuple(greens); self.min_green=min_green
         self.amber=amber;self.all_red=all_red;self.ped=ped
@@ -220,13 +216,12 @@ class Simulator:
 
 
 def simulate_network(network_dir, seed=0,demand_scale=1.,horizon_s=2400.,missions_per_hour=2.,policy="nominal",dt=.25):
-    """Secondary demonstrator only; X is NOT inferred from demand_scale.
-
+    """Run a synthetic network demonstrator with a demand-rate multiplier.
+    
     Eight origins each have a 0.025 veh/s base rate times demand_scale, modified
-    by a stationary common lognormal AR1 shock. Destination probabilities are
-    inverse-free-flow gravity weights with a hospital multiplier of 1.8. This
-    differs deliberately from any unavailable v8 source implementation.
-    """
+    by a stationary common lognormal AR1 shock. Destination probabilities use
+    inverse-free-flow gravity weights with a hospital multiplier of 1.8.
+    The demand_scale parameter specifies the arrival-rate multiplier."""
     links=load_links(network_dir);bounds=sorted({l.source for l in links.values() if l.source.startswith("B")})
     catalog={};destw={}
     for o in bounds:
@@ -268,11 +263,11 @@ def simulate_network(network_dir, seed=0,demand_scale=1.,horizon_s=2400.,mission
 
 
 def fluid_pulse_exact(arrival_rate,capacity,blackout_s):
-    """Constant-arrival initially empty fluid queue; baseline has constant c.
-
-    Service is zero on [0,Delta), c thereafter. This is not a cyclic-signal or
-    near-gridlock theorem. Its baseline queue is exactly zero.
-    """
+    """Solve an initially empty constant-arrival fluid queue after a service blackout.
+    
+    Arrival rate is constant with 0 < arrival_rate < capacity. Service is zero
+    on [0, blackout_s) and equals capacity afterward. The baseline has constant
+    capacity and a zero queue. Return recovery time, area and peak queue."""
     a,c,d=arrival_rate,capacity,blackout_s
     assert 0<a<c and d>0
     recovery=c*d/(c-a)

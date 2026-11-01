@@ -1,9 +1,8 @@
-"""Frozen simulator replay reader; linear interpolation changes only display positions.
+"""Read frozen simulator replays with display-position interpolation.
 
 Signal phases, routes, speed, membership and status use the previous recorded
-sample (zero-order hold), exactly as the delivered animation. Coordinates are
-Web Mercator metres (EPSG:3857), not ground-distance metres.
-"""
+sample (zero-order hold). Coordinates use Web Mercator metres (EPSG:3857);
+ground-distance measurements require the appropriate projection correction."""
 from pathlib import Path
 import json
 import numpy as np

@@ -67,7 +67,7 @@ def verify_directory(root):
 
 
 def smoke(root):
-    """A short NUMERICAL check; this is not another performance experiment."""
+    """Run a short numerical smoke check of the software and local paths."""
     root=Path(root).resolve();source=root/'work/v9'
     fixture=root/'outputs/AmbuGo_v7_Synthetic_Data'
     required=['nodes.csv','edges.csv','vehicle_classes.csv','od_probabilities.csv']

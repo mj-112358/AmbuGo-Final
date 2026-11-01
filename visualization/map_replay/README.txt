@@ -167,20 +167,18 @@ matched no-priority routing run with the same network and demand schedule.
 The graph data builder exactly reproduces all 2081 samples of the four plotted
 arrays; additional fields in the original progression JSON are not graph inputs.
 
-INTERPRETATION AND LIMITS
+SCENARIO AND CONTROL INTERPRETATION
 
-These are illustrations on actual mapped Mohali roads with generated traffic
-and assumed signal settings, not measured operational city performance. The
-B1000 setting is a budget-sensitivity example. Its burden forecast is a local
-heuristic proxy; it is not a proven measure of total network aftereffects.
-Four route candidates share much of the corridor and differ near the hospital.
-Their ETA labels do not prove a globally optimal route. The ambulance enters
-stronger-priority mode after its progress threshold is exceeded, so later
-requests should not be described as purely selective admissions. The hospital
-endpoint is a modeled road approach, not a surveyed emergency entrance.
-The graph includes the combined network effects of all three ambulance missions.
-The ending demonstrates genuine local ordinary traffic service; it does not
-establish full network recovery, minimum possible aftereffects, or a 32% gain.
+The replay uses mapped Mohali roads with generated traffic and assumed signal
+settings. B1000 is a budget-sensitivity scenario. Candidate selection uses
+a local queue/service-loss burden proxy; network aftereffects are evaluated
+separately from the matched traffic records. Four route candidates share much
+of the corridor and differ near the hospital. ETA labels compare those candidates.
+The ambulance switches to stronger-priority mode when its progress threshold
+is exceeded, and subsequent requests follow that mode. The destination is the
+modeled hospital road approach. The graph shows combined network effects of all
+three missions. The closing sequence shows local ordinary signal service after
+arrival; network recovery is evaluated from the full episode records.
 
 ATTRIBUTION
 

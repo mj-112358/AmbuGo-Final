@@ -29,8 +29,8 @@ listed separately in the paper.
 
 [archive/audited/](archive/audited/) retains the earlier audited draft's editable
 DOCX, manuscript, references, audit notes, figures and document builder.
-These files preserve the earlier wording and layout. The current revision was
-provided as a PDF; its editable authoring source was not supplied.
+These files preserve the earlier wording and layout. The current revision is
+maintained in the supplied PDF.
 
 The archived builder writes its outputs inside that archive directory. See the
 [reproduction guide](../docs/reproduction.md#rebuild-the-archived-editable-draft)

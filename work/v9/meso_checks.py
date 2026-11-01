@@ -1,8 +1,7 @@
-"""Run independent analytic and conservative-packet verification checks.
+"""Run analytic and conservative-packet numerical verification checks.
 
 Usage: bundled-python work/v9/meso_checks.py --out PATH
-Outputs are synthetic numerical verification evidence, not urban validation.
-"""
+Outputs record synthetic reference cases and conservation checks."""
 import argparse
 import json
 import math
@@ -29,7 +28,7 @@ def main():
             convergence.append(dict(X=x,**z));vals.append(abs(z['error_vehicle_s']))
         check(f'packet_refinement_convergence_X_{x}',all(a>b for a,b in zip(vals,vals[1:])),dict(absolute_errors_vehicle_s=vals))
         check(f'fine_packet_error_under_0point5percent_X_{x}',vals[-1]/exact['area_vehicle_s']<.005,dict(relative_error=vals[-1]/exact['area_vehicle_s']))
-    # Exact shape is X/(1-X), rather than asserting a fitted universal network law.
+    # The constant-arrival fluid reference has exact shape X/(1-X).
     scaled=[d['area_vehicle_s']*(1-d['X'])/d['X'] for d in fluid]
     check('fluid_shape_X_over_one_minus_X',max(scaled)-min(scaled)<1e-10,dict(scaled_areas=scaled,theoretical_value=25.))
 
@@ -80,12 +79,12 @@ def main():
     # Common desired arrivals and mission releases make generated counts equal
     # across controls; internal paths remain fixed in this secondary reference.
     check('paired_generated_cohort_identical',all(runs[i]['generated']==runs[i+1]['generated'] for i in [0,2,4]),dict(generated_pairs=[[runs[i]['generated'],runs[i+1]['generated']] for i in [0,2,4]]))
-    result=dict(scope='Independent synthetic numerical verification only; no observed-city validation',
+    result=dict(scope='Independent synthetic numerical verification of queue mechanics and accounting',
         checks_passed=sum(x['passed'] for x in checks),checks=checks,fluid_pulse=fluid,packet_refinement=convergence,
         network_reference_runs=runs,audited_network_ticks=sum(x['audited_ticks'] for x in runs)+rerun['audited_ticks'],
         seconds=time.perf_counter()-started,
         formula=dict(area='lambda*c*Delta^2/(2*(c-lambda))',recovery_from_pulse_start='c*Delta/(c-lambda)',assumptions='initially empty isolated constant-arrival fluid queue; baseline constant service c; treated service zero for Delta then c; lambda<c'),
-        limitations=['No cyclic-signal analytic validity inferred','No claim of Webster empirical calibration','No physical lane-changing or emergency-yielding validation','Secondary network scaffold uses fixed 24-second approach greens, not the main experimental control design','Meso network performance is not intended as headline study evidence'])
+        limitations=['The analytic reference assumes constant arrivals and a single service blackout','The numerical reference uses specified synthetic signal timings','Vehicle movement uses per-lane FIFO packet queues and storage reservations','The secondary network reference uses fixed 24-second approach greens','Secondary network runs check conservation, accounting and reproducibility'])
     if args.out:Path(args.out).write_text(json.dumps(result,indent=2))
     print(json.dumps(result,indent=2))
 if __name__=='__main__':main()

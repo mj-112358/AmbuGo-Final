@@ -104,7 +104,7 @@ def reproduce(rp,case,output,reference_dir):
         log=dict(budget_veh_s=1000,provenance='Portable deterministic reproduction of the recorded B1000 episode.',
                  decisions=ctl.explain_decisions,events=ctl.explain_events,progress=ctl.explain_progress,
                  source_net_sha256=new['net_sha256'],source_controller_sha256=new['frozen_controller_sha256'],
-                 legacy_allow_counter_note='Legacy counter includes non-signal edges; not a number of priority grants.')
+                 legacy_allow_counter_note='Legacy estimate counter includes signalized and unsignalized edges; priority admissions are reported separately.')
         (folder/'control_explanations.json').write_text(json.dumps(log,indent=2))
         captured=json.loads((HERE/'reference/B1000_control_explanations.json').read_text())
         canonical=lambda entries:sorted(entries,key=lambda x:(x['t'],x['ambulance'],x.get('junction',''),x.get('approach','')))

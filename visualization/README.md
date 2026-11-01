@@ -48,8 +48,8 @@ For a locally held complete `AmbuGo_Simultaneous` package, install its `requirem
 
 ## Interpretation and third-party content
 
-The 20-second synchronized map and graphs represent one recorded synthetic-traffic episode. The longer planning film and its accompanying graphs represent different examples with independent clocks and different priority-budget settings. Those graphs do not measure the maneuvers shown in the planning film. The compositor source is included; the planning film and its original animation project are not included.
+The 20-second synchronized map and graphs represent one recorded synthetic-traffic episode. The longer planning film and its accompanying graphs represent different examples with independent clocks and different priority-budget settings. Each set of graphs describes its own recorded simulation episode. The compositor source is included; rendering the planning-film version requires the locally held film and its animation project.
 
-The Vissim package is preparation only. It contains no completed native Vissim project or tested Vissim controller, and no Vissim execution or cross-simulator equivalence is claimed. Use its `README.txt` and `PTV_REQUIREMENTS_AND_INTEGRATION.txt` for the remaining native integration work.
+The Vissim transfer package supplies OpenDRIVE geometry, scenario inputs and an integration workflow. Native import, controller integration and paired Vissim evaluations are the next steps described in `README.txt` and `PTV_REQUIREMENTS_AND_INTEGRATION.txt`.
 
 Retain the Google and provider attribution in map images and films. Google imagery is not covered by a project-code license; see the packages' `THIRD_PARTY_NOTICES.txt` and [Google's geographic-content guidance](https://about.google/brand-resource-center/products-and-services/geo-guidelines/). The modeled road data derive from [OpenStreetMap contributors under ODbL](https://www.openstreetmap.org/copyright); the geometry notes also identify the imagery consulted for the local correction. Third-party dependencies are installed separately under their own licenses.
