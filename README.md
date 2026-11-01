@@ -4,17 +4,19 @@ AmbuGo combines ambulance routing with selective traffic signal priority to shor
 
 The controller evaluates routes and signal changes together, ranks them by predicted travel time and traffic burden, and updates priority as the ambulance moves through the network.
 
-[Paper](paper/AmbuGo_Audited_Research_Paper.pdf) · [Reproduction guide](docs/reproduction.md) · [Visualizations](visualization/README.md)
+[Paper](paper/AmbuGo_Research_Paper.pdf) · [Reproduction guide](docs/reproduction.md) · [Visualizations](visualization/README.md)
 
 ## Results
 
 Across 1,728 synthetic SUMO policy runs, selective joint control reduced balanced mean ambulance duration from 401.57 s with routing alone to 222.29 s. Compared with aggressive joint control, it added 11.10 s of mean ambulance duration while reducing positive spatial occupancy exposure by 3.84 vehicle-hours.
 
+The primary evaluation uses 48 paired seeds across nine load/mission conditions and four policies. The study also includes 264 secondary microscopic runs and 14,400 corrected mesoscopic runs. See the [paper directory](paper/README.md) for the current PDF and supporting files.
+
 ## Code
 
 - `work/v9/` — controllers, simulation runners, statistical analysis and results.
 - `outputs/AmbuGo_v7_Synthetic_Data/` — network and traffic inputs.
-- `paper/` — manuscript, figure generator and document builder.
+- `paper/` — current research paper, results-figure generator, reliability table and archived authoring files.
 - `visualization/` — map replay and animated graphs.
 - `scripts/check.py` — numerical and reproducibility checks.
 

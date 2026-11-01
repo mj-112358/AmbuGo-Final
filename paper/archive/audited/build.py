@@ -10,7 +10,7 @@ from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 
 HERE=Path(__file__).resolve().parent
-ROOT=HERE.parent
+ROOT=HERE.parents[2]
 OUT=HERE
 DATA=json.loads((ROOT/'work/v9/sumo_analysis.json').read_text())
 TEXT=(HERE/'manuscript.txt').read_text()

@@ -4,9 +4,10 @@ The Git repository contains source code, input fixtures, experiment protocols,
 scalar run records, statistical summaries, figures, and the final paper. These
 files support analysis regeneration without rerunning the traffic simulations.
 
-The current manuscript and its builder are in `paper/`. Per-run population
-traces and ordinary-vehicle event files can be regenerated with the simulation
-commands below.
+The current paper is [`paper/AmbuGo_Research_Paper.pdf`](../paper/AmbuGo_Research_Paper.pdf).
+Earlier editable manuscript files and their builder are retained in
+`paper/archive/audited/`. Per-run population traces and ordinary-vehicle event
+files can be regenerated with the simulation commands below.
 
 There are 1,728 primary microscopic policy runs, 264 microscopic secondary runs,
 and 14,400 mechanically corrected mesoscopic policy runs. Development records
@@ -58,34 +59,45 @@ Regeneration writes output files. Use a separate checkout to
 preserve the supplied outputs unchanged. Runtime measurements and numerical
 details can vary across machines and dependency versions.
 
-## Rebuild the current paper and results figure
+## Current paper and results-figure regeneration
 
-Use the Git repository root for these commands:
+The current 14-page paper is [AmbuGo_Research_Paper.pdf](../paper/AmbuGo_Research_Paper.pdf).
+It is supplied as a PDF. Its SHA-256 and supporting-file descriptions are in the
+[paper directory guide](../paper/README.md).
+
+To generate a results-figure preview from the retained numerical summaries,
+run from the repository root:
 
 ```sh
 python paper/plot_results.py --output /tmp/ambugo-primary-effects.png
-python -m pip install --target work/v9/vendor -r requirements-document.txt
-python paper/build.py
 ```
 
-The first command produces a preview without changing the published image.
-It plots the nine stored JSEL-minus-JFAST paired means and marginal 95%
-seed-bootstrap intervals from `work/v9/sumo_analysis.json`. Duration is in
-seconds; positive spatial exposure is in vehicle-hours. The dashed line is
-the evaluated 20-second mean-duration tolerance. Spatial exposure for each
-policy is measured relative to the same S0 baseline before forming the
+This command plots the nine stored JSEL-minus-JFAST paired means and marginal
+95% seed-bootstrap intervals from `work/v9/sumo_analysis.json`. Duration is
+in seconds; positive spatial exposure is in vehicle-hours. The dashed line
+marks the evaluated 20-second mean-duration allowance. Spatial exposure for
+each policy is measured relative to the same S0 baseline before forming the
 JSEL-minus-JFAST contrast.
 
-To replace the figure asset after reviewing the preview, run
-`python paper/plot_results.py` and then `python paper/build.py`.
-The builder reads `paper/manuscript.txt`, `paper/references.json`, the local
-figure assets, and retained numerical summaries. It writes the DOCX and
-`Episode_Reliability.csv` into `paper/`. Export the DOCX with a Word-compatible
-processor to make a PDF. Exact pagination can vary with fonts and applications.
-The supplied final PDF can be read without an authoring environment.
+### Rebuild the archived editable draft
 
-`work/v9/build_paper.py` builds the historical v9 draft; it does not build the
-current paper.
+The earlier audited draft's DOCX, manuscript, references, figure assets and
+builder are in `paper/archive/audited/`. To rebuild that draft:
+
+```sh
+python -m pip install --target work/v9/vendor -r requirements-document.txt
+python paper/archive/audited/build.py
+```
+
+The builder reads its archived manuscript, references and figures together
+with retained numerical summaries. It writes the earlier DOCX and a
+regenerated `Episode_Reliability.csv` into the archive directory. The current
+paper's revised wording and layout are maintained in the supplied PDF; this
+archived builder reproduces the earlier draft.
+
+`work/v9/build_paper.py` builds the historical v9 draft. The checked-in
+`paper/Episode_Reliability.csv` remains the episode-level companion table for
+the current paper's reported experiments.
 
 ## Rerun the microscopic evaluations
 
